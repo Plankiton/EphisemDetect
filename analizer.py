@@ -81,19 +81,25 @@ if __name__ == '__main__':
     for x, y, gray_shade in get_gray_shade(img):
         pix_map[x][y] = gray_shade
 
-        # img_pix_map[x, y] = tuple([
-        #   int(gray_shade) for i in r(3)
-        # ])
-
     c = 0
-    new_pix_map = do_lbp_on_pix_map(pix_map)
+    lbp_pix_map = do_lbp_on_pix_map(pix_map)
     new_img = Image.new('RGBA', size = (
-        len(new_pix_map), len(new_pix_map[0])
+        len(lbp_pix_map), len(lbp_pix_map[0])
     ))
-    new_img_pix_map = new_img.load()
 
-    for x, y, pixel in get_pix_map(new_pix_map):
-        new_img_pix_map[x, y] = pixel
+    new_pix_map = new_img.load()
+    for x, y, pixel in get_pix_map(lbp_pix_map):
+        new_pix_map[x, y] = pixel
+
+    '''
+    new_img = Image.new('RGBA', size = (
+        img.width, img.height
+    ))
+
+    for x in range(new_img.width):
+        for y in range(new_img.height):
+            new_img_pix_map[x, y] = (0, 0, 0) if new_pix_map[x][y] < 41 \
+                else (255, 255, 255)
+    '''
 
     new_img.show()
-    img.show()

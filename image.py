@@ -1,5 +1,5 @@
-from analizer import media
 from PIL import Image, PyAccess
+from analizer import media
 
 def get_gray_shade(img):
     img_pix_map = img.load()

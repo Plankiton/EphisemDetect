@@ -42,10 +42,27 @@ def local_binary_patt(pixel_list: list) -> int:
         binary += str(lbp_list[x][y])
     return int(binary, 2)
 
+
+def media(num_list):
+    total = 0
+    for num in num_list:
+        total += num
+    return total/len(num_list)
+
+
 if __name__ == '__main__':
-    lista = [
-        [ 27, 68, 29],
-        [245, 48,  5],
-        [155, 24, 53]
-    ]
-    print(local_binary_patt(lista))
+    from sys import argv as args
+    from image import *
+
+    img = Image.open(args[1])
+
+    img_rgb_matrix = []
+    for x in range(img.width):
+        img_rgb_matrix.append([])
+        for y in range(img.height):
+            img_rgb_matrix[x].append(None)
+    print(img_rgb_matrix)
+
+    for x, y, rgb in get_color_matrix(img):
+        img_rgb_matrix[x][y] = media(rgb)
+        print(img_rgb_matrix[x][y], end = '\n' if x >= img.width else ' ')

@@ -1,4 +1,4 @@
-r = range
+from util import *
 
 def _local_binary_patt_list(pixel_list: list):
     height = len(pixel_list)

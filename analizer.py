@@ -1,3 +1,5 @@
+r = range
+
 def _local_binary_patt_list(pixel_list: list):
     height = len(pixel_list)
     width = len(pixel_list[0])
@@ -53,22 +55,17 @@ if __name__ == '__main__':
 
     img = Image.open(args[1])
 
-    img_rgb_matrix = []
-    img_pix_map = img.load()
-    for x in range(img.width):
-        img_rgb_matrix.append([])
-        for y in range(img.height):
-            img_rgb_matrix[x].append(int(
-                media( img_pix_map[x, y] )
-            ))
-    del img_pix_map
+    img_pix_map = [[None for j in r(img.height)]
+                   for i in r(img.width)]
+    for x, y, shade_of_gray in get_normalized(img):
+        img_pix_map[x][y] = shade_of_gray
 
     c = 0
     new_pixel_list = []
-    for x in range(0, img.width, 3):
-        lines = img_rgb_matrix[x:x+3]
+    for x in r(0, img.width, 3):
+        lines = img_pix_map[x:x+3]
         new_pixel_list.append([])
-        for y in range(0, img.height, 3):
+        for y in r(0, img.height, 3):
             columns = [c[y:y+3] for c in lines]
             if len(columns) == 3 and len(columns[0]) == 3:
                 pixel = local_binary_patt(columns)

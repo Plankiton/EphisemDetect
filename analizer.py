@@ -1,3 +1,5 @@
+r = range
+
 def _local_binary_patt_list(pixel_list: list):
     height = len(pixel_list)
     width = len(pixel_list[0])
@@ -46,44 +48,52 @@ def media(num_list):
         total += num
     return total/len(num_list)
 
+def do_lbp_on_pix_map(pix_map):
+    c = 0
+    new_pix_map = []
+    for x in r(0, img.width, 3):
+        limited_pix_list = pix_map[x:x+3]
+
+        new_pix_map.append([])
+        for y in r(0, img.height, 3):
+            local_pix_range = [c[y:y+3] for c in limited_pix_list]
+
+            if len(local_pix_range) == 3 \
+                    and len(local_pix_range[0]) == 3:
+                pixel = local_binary_patt(local_pix_range)
+                new_pix_map[c].append(pixel)
+        if new_pix_map[c] == []:
+            del new_pix_map[c]
+        else:
+            c += 1
+    return new_pix_map
+
 
 if __name__ == '__main__':
     from sys import argv as args
     from image import *
 
     img = Image.open(args[1])
-
-    img_rgb_matrix = []
     img_pix_map = img.load()
-    for x in range(img.width):
-        img_rgb_matrix.append([])
-        for y in range(img.height):
-            img_rgb_matrix[x].append(int(
-                media( img_pix_map[x, y] )
-            ))
+
+    pix_map = [[None for j in r(img.height)]
+                   for i in r(img.width)]
+    for x, y, gray_shade in get_gray_shade(img):
+        pix_map[x][y] = gray_shade
+
+        # img_pix_map[x, y] = tuple([
+        #   int(gray_shade) for i in r(3)
+        # ])
 
     c = 0
-    new_pixel_list = []
-    for x in range(0, img.width, 3):
-        lines = img_rgb_matrix[x:x+3]
-        new_pixel_list.append([])
-        for y in range(0, img.height, 3):
-            columns = [c[y:y+3] for c in lines]
-            if len(columns) == 3 and len(columns[0]) == 3:
-                pixel = local_binary_patt(columns)
-            new_pixel_list[c].append(pixel)
-        c += 1
-
-    new_img = Image.new('RGBA', size = (len(new_pixel_list), len(new_pixel_list[0])))
+    new_pix_map = do_lbp_on_pix_map(pix_map)
+    new_img = Image.new('RGBA', size = (
+        len(new_pix_map), len(new_pix_map[0])
+    ))
     new_img_pix_map = new_img.load()
-    for x in range(new_img.width):
-        for y in range(new_img.height):
-            new_img_pix_map[x, y] = (
-                new_pixel_list[x][y],
-                new_pixel_list[x][y],
-                new_pixel_list[x][y]
-            )
 
+    for x, y, pixel in get_pix_map(new_pix_map):
+        new_img_pix_map[x, y] = pixel
 
-    img.show()
     new_img.show()
+    img.show()

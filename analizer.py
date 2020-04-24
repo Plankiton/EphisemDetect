@@ -61,6 +61,7 @@ if __name__ == '__main__':
             img_rgb_matrix[x].append(int(
                 media( img_pix_map[x, y] )
             ))
+    del img_pix_map
 
     c = 0
     new_pixel_list = []
@@ -73,16 +74,14 @@ if __name__ == '__main__':
                 pixel = local_binary_patt(columns)
             new_pixel_list[c].append(pixel)
         c += 1
+    del c
 
     new_img = Image.new('RGBA', size = (len(new_pixel_list), len(new_pixel_list[0])))
     new_img_pix_map = new_img.load()
     for x in range(new_img.width):
         for y in range(new_img.height):
-            new_img_pix_map[x, y] = (
-                new_pixel_list[x][y],
-                new_pixel_list[x][y],
-                new_pixel_list[x][y]
-            )
+            new_img_pix_map[x, y] = tuple([new_pixel_list[x][y]
+                                           for i in range(3)])
 
 
     img.show()

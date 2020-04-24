@@ -2,9 +2,6 @@ def _local_binary_patt_list(pixel_list: list):
     height = len(pixel_list)
     width = len(pixel_list[0])
 
-    if height < 3 or width < 3:
-        raise IndexError
-
     thershold = \
         pixel_list [height//2] [width//2]
 
@@ -61,8 +58,33 @@ if __name__ == '__main__':
         img_rgb_matrix.append([])
         for y in range(img.height):
             img_rgb_matrix[x].append(None)
-    print(img_rgb_matrix)
 
     for x, y, rgb in get_color_matrix(img):
-        img_rgb_matrix[x][y] = media(rgb)
-        print(img_rgb_matrix[x][y], end = '\n' if x >= img.width else ' ')
+        img_rgb_matrix[x][y] = int(media(rgb))
+
+    c = 0
+    new_pixel_list = []
+    for x in range(0, img.width, 3):
+        lines = img_rgb_matrix[x:x+3]
+        new_pixel_list.append([])
+        for y in range(0, img.height, 3):
+            columns = [c[y:y+3] for c in lines]
+            if len(columns) == 3 and len(columns[0]) == 3:
+                pixel = local_binary_patt(columns)
+            new_pixel_list[c].append(pixel)
+        c += 1
+
+
+    new_img = Image.new('RGBA', size = (len(new_pixel_list), len(new_pixel_list[0])))
+    new_img_pix_map = new_img.load()
+    for x in range(new_img.width):
+        for y in range(new_img.height):
+            new_img_pix_map[x, y] = (
+                new_pixel_list[x][y],
+                new_pixel_list[x][y],
+                new_pixel_list[x][y]
+            )
+
+
+    img.show()
+    new_img.show()

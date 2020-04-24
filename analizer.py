@@ -54,13 +54,13 @@ if __name__ == '__main__':
     img = Image.open(args[1])
 
     img_rgb_matrix = []
+    img_pix_map = img.load()
     for x in range(img.width):
         img_rgb_matrix.append([])
         for y in range(img.height):
-            img_rgb_matrix[x].append(None)
-
-    for x, y, rgb in get_color_matrix(img):
-        img_rgb_matrix[x][y] = int(media(rgb))
+            img_rgb_matrix[x].append(int(
+                media( img_pix_map[x, y] )
+            ))
 
     c = 0
     new_pixel_list = []
@@ -73,7 +73,6 @@ if __name__ == '__main__':
                 pixel = local_binary_patt(columns)
             new_pixel_list[c].append(pixel)
         c += 1
-
 
     new_img = Image.new('RGBA', size = (len(new_pixel_list), len(new_pixel_list[0])))
     new_img_pix_map = new_img.load()

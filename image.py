@@ -1,11 +1,17 @@
 from PIL import Image, PyAccess
 from analizer import media
 
-def get_gray_shade(img):
+def get_gray_shade(img, mode = 'rgb'):
+    modes = dict(
+        rgb = media,
+        gray_shade = int
+    )
+
     img_pix_map = img.load()
+    print(img_pix_map[0,0])
     for x in range(img.width):
         for y in range(img.height):
-            yield x, y, media( img_pix_map[x, y] )
+            yield x, y, modes[mode]( img_pix_map[x, y] )
 
 
 def get_pix_map(pix_map):

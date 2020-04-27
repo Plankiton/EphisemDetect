@@ -48,14 +48,15 @@ def media(num_list):
         total += num
     return total/len(num_list)
 
+
 def do_lbp_on_pix_map(pix_map, only_thershold = False):
     c = 0
     new_pix_map = []
-    for x in r(0, img.width, 3):
+    for x in r(0, len(pix_map), 3):
         limited_pix_list = pix_map[x:x+3]
 
         new_pix_map.append([])
-        for y in r(0, img.height, 3):
+        for y in r(0, len(pix_map[0]), 3):
             local_pix_range = [c[y:y+3] for c in limited_pix_list]
 
             if only_thershold and len(local_pix_range) == 3 \
@@ -72,7 +73,7 @@ def do_lbp_on_pix_map(pix_map, only_thershold = False):
             del new_pix_map[c]
         else:
             c += 1
-    return new_pix_map if not only_thershold else pix_map
+    return  pix_map if only_thershold else new_pix_map
 
 
 if __name__ == '__main__':
@@ -84,45 +85,19 @@ if __name__ == '__main__':
 
     pix_map = [[None for j in r(img.height)]
                    for i in r(img.width)]
-    for x, y, gray_shade in get_gray_shade(img):
-        pix_map[x][y] = gray_shade
+    for x in range(img.width):
+        for y in range(img.height):
+            pix_map[x][y] = img_pix_map[x, y]
 
     c = 0
-    lbp_pix_map = do_lbp_on_pix_map(pix_map, only_thershold = True)
+    lbp_pix_map = do_lbp_on_pix_map(pix_map)
     new_img = Image.new('RGBA', size = (
-        img.width, img.height
-        # len(lbp_pix_map), len(lbp_pix_map[0])
+        len(lbp_pix_map), len(lbp_pix_map[0])
     ))
 
-    fmax = lambda n: fmax(PI) if n > PI else n
-    for p in lbp_pix_map:
-        u = sum([i*p[i]
-                 for i in r(len(p))])
-        o = sum([(i-u)**2*p[i]
-                 for i in r(len(p))])**0.5
-        skewness = 1/(o**3)*sum([(i-u)**3*p[i]
-                                 for i in r(len(p))])
-        kurtosis = 1/(o**4)*sum([(i-u)**4*p[i]-3
-            for i in r(len(p))])
-        energia = sum([p[i]**2 for i in r(len(p))])
-        print(skewness, kurtosis, energia)
-        print(fmax(PI * p[-1]-p[0]))
-
-    r"""
     new_pix_map = new_img.load()
     for x, y, pixel in get_pix_map(lbp_pix_map):
         new_pix_map[x, y] = pixel
 
-    r'''
-    new_img = Image.new('RGBA', size = (
-        img.width, img.height
-    ))
-
-    for x in range(new_img.width):
-        for y in range(new_img.height):
-            new_img_pix_map[x, y] = (0, 0, 0) if new_pix_map[x][y] < 41 \
-                else (255, 255, 255)
-    '''
-
+    img.show()
     new_img.show()
-    """

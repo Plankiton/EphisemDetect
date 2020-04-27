@@ -25,4 +25,4 @@ for img in imgs:
 
     lbps[img_name][img_type] = do_lbp_on_pix_map(pix_map)
 
-open('local_binary_patt.json').write(dumps(lbps))
+open('local_binary_patt.json', 'w').write(dumps(lbps))

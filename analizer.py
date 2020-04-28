@@ -35,7 +35,7 @@ def compare(pxl1, pxl2):
     stage.append(
         sum(line_perc)/len(line_perc)
     )
-    cat_stage.append('line')
+    cat_stage.append('line-line')
 
     line_perc = []
     for x in range(h2):
@@ -50,7 +50,7 @@ def compare(pxl1, pxl2):
     stage.append(
         sum(line_perc)/len(line_perc)
     )
-    cat_stage.append('line (2 on 1)')
+    cat_stage.append('line-line (2 on 1)')
     del line_perc
 
 
@@ -68,7 +68,7 @@ def compare(pxl1, pxl2):
     stage.append(
         sum(column_perc)/len(column_perc)
     )
-    cat_stage.append('column')
+    cat_stage.append('col-col')
 
     column_perc = []
     for x in range(h2):
@@ -83,7 +83,7 @@ def compare(pxl1, pxl2):
     stage.append(
         sum(column_perc)/len(column_perc)
     )
-    cat_stage.append('column (2 on 1)')
+    cat_stage.append('col-col (2 on 1)')
     del column_perc
 
 
@@ -96,7 +96,7 @@ def compare(pxl1, pxl2):
             if pxl1[x][y] == pxl2[x][y]:
                 count += 1
     stage.append( (count * 100) / (hl * wl) )
-    cat_stage.append('item_to_item')
+    cat_stage.append('item-item')
 
     print(*(f'{cat_stage[i]}: {stage[i]}\n' for i in r(len(stage))), sep = '')
     return sum(stage)/len(stage)

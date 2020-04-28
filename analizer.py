@@ -15,7 +15,7 @@ def compare(pxl1, pxl2):
     cat_stage.append('width')
 
 
-    # pixel comparation
+    # line pixel comparation
     line_perc = []
     for x in range(h1):
         count = 0
@@ -30,10 +30,8 @@ def compare(pxl1, pxl2):
         sum(line_perc)/len(line_perc)
     )
     cat_stage.append('line')
-    del line_perc
 
-    # range pixel comparation
-    column_perc = []
+    line_perc = []
     for x in range(h2):
         count = 0
         history = []
@@ -42,12 +40,12 @@ def compare(pxl1, pxl2):
                 count += pxl1[x].count(pxl2[x][y])
                 history.append(pxl2[x][y])
 
-        column_perc.append((count*100)/w2)
+        line_perc.append((count*100)/w2)
     stage.append(
-        sum(column_perc)/len(column_perc)
+        sum(line_perc)/len(line_perc)
     )
-    cat_stage.append('column')
-    del column_perc
+    cat_stage.append('line (2 on 1)')
+    del line_perc
 
     # pixel to pixel comparation
     count = 0
@@ -59,20 +57,6 @@ def compare(pxl1, pxl2):
                 count += 1
     stage.append( (count * 100) / (hl * wl) )
     cat_stage.append('item_to_item')
-
-
-    # pixel in list comparation
-    count = []
-    for x in range(h1):
-        for y in range(w1):
-            for x2 in range(h2):
-                if pxl1[x][y] not in history:
-                    count.append(
-                        pxl2[x2].count(pxl1[x][y])
-                    )
-    print((sum(count)*100)/w2*h2)
-
-    cat_stage.append('item_in_list')
 
     print(*(f'{cat_stage[i]}: {stage[i]}\n' for i in r(len(stage))), sep = '')
     return sum(stage)/len(stage)

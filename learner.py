@@ -15,14 +15,6 @@ for img in imgs:
         lbps[img_name] = dict(top = None, middle = None, bottom = None)
 
     img = Image.open(img)
-    img_pix_map = img.load()
-
-    pix_map = [[None for j in range(img.height)]
-                   for i in range(img.width)]
-    for x in range(img.height):
-        for y in range(img.width):
-            pix_map[x][y] = img_pix_map[x, y]
-
     lbps[img_name][img_type] = do_lbp_on_pix_map(pix_map)
 
 open('local_binary_patt.json', 'w').write(dumps(lbps))

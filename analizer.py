@@ -1,3 +1,4 @@
+from image import get_pix_map, Image
 from util import *
 
 def compare(pxl1, pxl2):
@@ -150,9 +151,12 @@ def media(num_list):
     return total/len(num_list)
 
 
-def get_lbp(img):
-    c = 0
+def get_lbp(img: Image.Image, pix_map = None):
+    if 'rgb' in img.mode.lower():
+        img = img.convert(mode='I', matrix=None, dither=None, palette=0, colors=256)
     pix_map = img.load()
+
+    c = 0
     new_pix_map = []
     for x in r(0, img.height, 3):
 

@@ -126,22 +126,22 @@ def media(num_list):
     return total/len(num_list)
 
 
-def do_lbp_on_pix_map(pix_map, only_thershold = False):
+def get_lbp(img):
     c = 0
+    pix_map = img.load()
     new_pix_map = []
-    for x in r(0, len(pix_map), 3):
-        limited_pix_list = pix_map[x:x+3]
+    for x in r(0, img.height, 3):
 
         new_pix_map.append([])
-        for y in r(0, len(pix_map[0]), 3):
-            local_pix_range = [c[y:y+3] for c in limited_pix_list]
+        for y in r(0, img.width, 3):
+            try:
+                local_pix_range = [[
+                    pix_map[i, j] for j in range(y, y+3)
+                ] for i in range(x, x+3)]
+            except:
+                break
 
-            if only_thershold and len(local_pix_range) == 3 \
-                    and len(local_pix_range[0]) == 3:
-                pixel = local_binary_patt(local_pix_range)
-                pix_map[x+1][y+1] = pixel
-
-            elif len(local_pix_range) == 3 \
+            if len(local_pix_range) == 3 \
                     and len(local_pix_range[0]) == 3:
                 pixel = local_binary_patt(local_pix_range)
                 new_pix_map[c].append(pixel)
@@ -150,7 +150,8 @@ def do_lbp_on_pix_map(pix_map, only_thershold = False):
             del new_pix_map[c]
         else:
             c += 1
-    return  pix_map if only_thershold else new_pix_map
+
+    return new_pix_map
 
 
 if __name__ == '__main__':

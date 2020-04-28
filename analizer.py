@@ -14,6 +14,12 @@ def compare(pxl1, pxl2):
     stage.append(100-(diference*100/w2))
     cat_stage.append('width')
 
+    swap1 = [[
+        pxl1[y][x]\
+        for y in range(w1)] for x in range(h1)]
+    swap2 = [[
+        pxl2[y][x]\
+        for y in range(w2)] for x in range(h2)]
 
     # line pixel comparation
     line_perc = []
@@ -46,6 +52,40 @@ def compare(pxl1, pxl2):
     )
     cat_stage.append('line (2 on 1)')
     del line_perc
+
+
+    # column pixel comparation
+    column_perc = []
+    for x in range(h1):
+        count = 0
+        history = []
+        for y in range(w1):
+            if  x < h2 and swap1[x][y] not in history:
+                count += swap2[x].count(swap1[x][y])
+                history.append(swap1[x][y])
+
+        column_perc.append((count*100)/w2)
+    stage.append(
+        sum(column_perc)/len(column_perc)
+    )
+    cat_stage.append('column')
+
+    column_perc = []
+    for x in range(h2):
+        count = 0
+        history = []
+        for y in range(w2):
+            if x < h1 and swap2[x][y] not in history:
+                count += swap1[x].count(swap2[x][y])
+                history.append(swap2[x][y])
+
+        column_perc.append((count*100)/w2)
+    stage.append(
+        sum(column_perc)/len(column_perc)
+    )
+    cat_stage.append('column (2 on 1)')
+    del column_perc
+
 
     # pixel to pixel comparation
     count = 0

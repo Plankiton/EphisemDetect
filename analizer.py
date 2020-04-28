@@ -8,10 +8,12 @@ def compare(pxl1, pxl2):
 
     # Size comparation
     diference = h1 - h2
+    yield 100-(diference*100/h2)
     #stage.append(100-(diference*100/h2))
     #cat_stage.append('height')
 
     diference = w1 - w2
+    yield 100-(diference*100/w2)
     #stage.append(100-(diference*100/w2))
     #cat_stage.append('width')
 
@@ -33,6 +35,7 @@ def compare(pxl1, pxl2):
                 history.append(pxl1[x][y])
 
         line_perc.append((count*100)/w2)
+    yield sum(line_perc)/len(line_perc)
     #stage.append(
     #    sum(line_perc)/len(line_perc)
     #)
@@ -48,6 +51,7 @@ def compare(pxl1, pxl2):
                 history.append(pxl2[x][y])
 
         line_perc.append((count*100)/w2)
+    yield sum(line_perc)/len(line_perc)
     #stage.append(
     #    sum(line_perc)/len(line_perc)
     #)
@@ -66,6 +70,7 @@ def compare(pxl1, pxl2):
                 history.append(swap1[x][y])
 
         column_perc.append((count*100)/w2)
+    yield sum(column_perc)/len(column_perc)
     #stage.append(
     #    sum(column_perc)/len(column_perc)
     #)
@@ -81,6 +86,7 @@ def compare(pxl1, pxl2):
                 history.append(swap2[x][y])
 
         column_perc.append((count*100)/w2)
+    yield sum(column_perc)/len(column_perc)
     #stage.append(
     #    sum(column_perc)/len(column_perc)
     #)
@@ -96,6 +102,7 @@ def compare(pxl1, pxl2):
         for y in range(wl):
             if pxl1[x][y] == pxl2[x][y]:
                 count += 1
+    yield  (count * 100) / (hl * wl)
     #stage.append( (count * 100) / (hl * wl) )
     #cat_stage.append('item-item')
 

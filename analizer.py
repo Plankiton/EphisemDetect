@@ -8,12 +8,12 @@ def compare(pxl1, pxl2):
 
     # Size comparation
     diference = h1 - h2
-    stage.append(100-(diference*100/h2))
-    cat_stage.append('height')
+    #stage.append(100-(diference*100/h2))
+    #cat_stage.append('height')
 
     diference = w1 - w2
-    stage.append(100-(diference*100/w2))
-    cat_stage.append('width')
+    #stage.append(100-(diference*100/w2))
+    #cat_stage.append('width')
 
     swap1 = [[
         pxl1[y][x]\
@@ -33,10 +33,10 @@ def compare(pxl1, pxl2):
                 history.append(pxl1[x][y])
 
         line_perc.append((count*100)/w2)
-    stage.append(
-        sum(line_perc)/len(line_perc)
-    )
-    cat_stage.append('line-line')
+    #stage.append(
+    #    sum(line_perc)/len(line_perc)
+    #)
+    #cat_stage.append('line-line')
 
     line_perc = []
     for x in range(h2):
@@ -48,10 +48,10 @@ def compare(pxl1, pxl2):
                 history.append(pxl2[x][y])
 
         line_perc.append((count*100)/w2)
-    stage.append(
-        sum(line_perc)/len(line_perc)
-    )
-    cat_stage.append('line-line (2 on 1)')
+    #stage.append(
+    #    sum(line_perc)/len(line_perc)
+    #)
+    #cat_stage.append('line-line (2 on 1)')
     del line_perc
 
 
@@ -66,9 +66,9 @@ def compare(pxl1, pxl2):
                 history.append(swap1[x][y])
 
         column_perc.append((count*100)/w2)
-    stage.append(
-        sum(column_perc)/len(column_perc)
-    )
+    #stage.append(
+    #    sum(column_perc)/len(column_perc)
+    #)
     cat_stage.append('col-col')
 
     column_perc = []
@@ -81,10 +81,10 @@ def compare(pxl1, pxl2):
                 history.append(swap2[x][y])
 
         column_perc.append((count*100)/w2)
-    stage.append(
-        sum(column_perc)/len(column_perc)
-    )
-    cat_stage.append('col-col (2 on 1)')
+    #stage.append(
+    #    sum(column_perc)/len(column_perc)
+    #)
+    #cat_stage.append('col-col (2 on 1)')
     del column_perc
 
 
@@ -96,11 +96,11 @@ def compare(pxl1, pxl2):
         for y in range(wl):
             if pxl1[x][y] == pxl2[x][y]:
                 count += 1
-    stage.append( (count * 100) / (hl * wl) )
-    cat_stage.append('item-item')
+    #stage.append( (count * 100) / (hl * wl) )
+    #cat_stage.append('item-item')
 
-    print(*(f'{cat_stage[i]}: {stage[i]}\n' for i in r(len(stage))), sep = '')
-    return sum(stage)/len(stage)
+    #print(*(f'{cat_stage[i]}: {stage[i]}\n' for i in r(len(stage))), sep = '')
+    #return sum(stage)/len(stage)
 
 def _local_binary_patt_list(pixel_list: list):
     height = len(pixel_list)

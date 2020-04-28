@@ -1,5 +1,82 @@
 from util import *
 
+def compare(pxl1, pxl2):
+    stage, cat_stage = [], []
+    h1, w1 = len(pxl1), len(pxl1[0])
+    h2, w2 = len(pxl2), len(pxl2[0])
+
+    # Size comparation
+    diference = h1 - h2
+    stage.append(100-(diference*100/h2))
+    cat_stage.append('height')
+
+    diference = w1 - w2
+    stage.append(100-(diference*100/w2))
+    cat_stage.append('width')
+
+
+    # pixel comparation
+    line_perc = []
+    for x in range(h1):
+        count = 0
+        history = []
+        for y in range(w1):
+            if  x < h2 and pxl1[x][y] not in history:
+                count += pxl2[x].count(pxl1[x][y])
+                history.append(pxl1[x][y])
+
+        line_perc.append((count*100)/w2)
+    stage.append(
+        sum(line_perc)/len(line_perc)
+    )
+    cat_stage.append('line')
+    del line_perc
+
+    # range pixel comparation
+    column_perc = []
+    for x in range(h2):
+        count = 0
+        history = []
+        for y in range(w2):
+            if x < h1 and pxl2[x][y] not in history:
+                count += pxl1[x].count(pxl2[x][y])
+                history.append(pxl2[x][y])
+
+        column_perc.append((count*100)/w2)
+    stage.append(
+        sum(column_perc)/len(column_perc)
+    )
+    cat_stage.append('column')
+    del column_perc
+
+    # pixel to pixel comparation
+    count = 0
+    hl = h1 - (h1-h2)
+    wl = w1 - (w1-w2)
+    for x in range(hl):
+        for y in range(wl):
+            if pxl1[x][y] == pxl2[x][y]:
+                count += 1
+    stage.append( (count * 100) / (hl * wl) )
+    cat_stage.append('item_to_item')
+
+
+    # pixel in list comparation
+    count = []
+    for x in range(h1):
+        for y in range(w1):
+            for x2 in range(h2):
+                if pxl1[x][y] not in history:
+                    count.append(
+                        pxl2[x2].count(pxl1[x][y])
+                    )
+    print((sum(count)*100)/w2*h2)
+
+    cat_stage.append('item_in_list')
+
+    print(*(f'{cat_stage[i]}: {stage[i]}\n' for i in r(len(stage))), sep = '')
+    return sum(stage)/len(stage)
+
 def _local_binary_patt_list(pixel_list: list):
     height = len(pixel_list)
     width = len(pixel_list[0])

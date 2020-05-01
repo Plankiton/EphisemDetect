@@ -2,9 +2,13 @@ from image import get_pix_map, Image
 from util import *
 
 def compare(pxl1, pxl2):
-    stage, cat_stage = [], []
-    h1, w1 = len(pxl1), len(pxl1[0])
-    h2, w2 = len(pxl2), len(pxl2[0])
+    try:
+        h1, w1 = len(pxl1), len(pxl1[0])
+        h2, w2 = len(pxl2), len(pxl2[0])
+    except:return [0]
+
+    hl = h1 - (h1-h2)
+    wl = w1 - (w1-w2)
 
     # Size comparation
     diference = h1 - h2
@@ -17,12 +21,15 @@ def compare(pxl1, pxl2):
     #stage.append(100-(diference*100/w2))
     #cat_stage.append('width')
 
-    swap1 = [[
-        pxl1[y][x]\
-        for y in range(w1)] for x in range(h1)]
-    swap2 = [[
-        pxl2[y][x]\
-        for y in range(w2)] for x in range(h2)]
+    swap1, swap2 = [], []
+    for x in range(hl):
+        swap2.append([])
+        swap1.append([])
+        for y in range(wl):
+            try:
+                swap2[y].append(pxl2[y][x])
+                swap1[y].append(pxl1[y][x])
+            except:continue
 
     # line pixel comparation
     line_perc = []
@@ -65,25 +72,29 @@ def compare(pxl1, pxl2):
         count = 0
         history = []
         for y in range(w1):
-            if  x < h2 and swap1[x][y] not in history:
-                count += swap2[x].count(swap1[x][y])
-                history.append(swap1[x][y])
+            try:
+                if x < h2 and swap1[x][y] not in history:
+                    count += swap2[x].count(swap1[x][y])
+                    history.append(swap1[x][y])
+            except:break
 
         column_perc.append((count*100)/w2)
     yield sum(column_perc)/len(column_perc)
     #stage.append(
     #    sum(column_perc)/len(column_perc)
     #)
-    cat_stage.append('col-col')
+    #cat_stage.append('col-col')
 
     column_perc = []
     for x in range(h2):
         count = 0
         history = []
         for y in range(w2):
-            if x < h1 and swap2[x][y] not in history:
-                count += swap1[x].count(swap2[x][y])
-                history.append(swap2[x][y])
+            try:
+                if x < h1 and swap2[x][y] not in history:
+                    count += swap1[x].count(swap2[x][y])
+                    history.append(swap2[x][y])
+            except:break
 
         column_perc.append((count*100)/w2)
     yield sum(column_perc)/len(column_perc)
@@ -96,12 +107,12 @@ def compare(pxl1, pxl2):
 
     # pixel to pixel comparation
     count = 0
-    hl = h1 - (h1-h2)
-    wl = w1 - (w1-w2)
     for x in range(hl):
         for y in range(wl):
-            if pxl1[x][y] == pxl2[x][y]:
-                count += 1
+            try:
+                if pxl1[x][y] == pxl2[x][y]:
+                    count += 1
+            except:break
     yield  (count * 100) / (hl * wl)
     #stage.append( (count * 100) / (hl * wl) )
     #cat_stage.append('item-item')

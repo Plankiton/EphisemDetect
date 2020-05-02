@@ -29,21 +29,14 @@ def threshold(img_ar: asarray):
                 new_ar[x].append(tuple([255 for i in range(3)]))
             else:
                 new_ar[x].append(tuple([0 for i in range(3)]))
-    return new_ar
+    return asarray(new_ar)
 
 
 img = Image.open(argv[1])
 if img.mode == 'I':
     img = img.convert('RGBA')
 img_ar = asarray(img)
-new_img = Image.new(mode='RGBA',
-                    size = (img.width, img.height))
-pix_map = new_img.load()
-
-threshold_ar = threshold(img_ar)
-for x in range(len(img_ar)):
-    for y in range(len(img_ar[0])):
-        pix_map[x, y] = threshold_ar[x][y]
+new_img = Image.fromarray(threshold(img_ar))
 
 img.show()
 new_img.show()

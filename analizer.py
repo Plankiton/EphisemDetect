@@ -3,7 +3,7 @@ from numpy import asarray
 from PIL import Image
 from sys import argv
 
-def threshold(img_ar: asarray):
+def _threshold(img_ar: asarray):
     ar_backup = img_ar
     balance_ar = []
     new_ar = []
@@ -32,18 +32,21 @@ def threshold(img_ar: asarray):
     return new_ar
 
 
+def threshold(img: Image):
+    if img.mode == 'I':
+        img = img.convert('RGBA')
+    img_ar = asarray(img)
+    new_img = Image.new(mode='RGBA',
+                        size = (img.width, img.height))
+    pix_map = new_img.load()
+
+    threshold_ar = _threshold(img_ar)
+    for x in range(len(img_ar)):
+        for y in range(len(img_ar[0])):
+            pix_map[x, y] = threshold_ar[x][y]
+
+    return new_img
+
+
 img = Image.open(argv[1])
-if img.mode == 'I':
-    img = img.convert('RGBA')
-img_ar = asarray(img)
-new_img = Image.new(mode='RGBA',
-                    size = (img.width, img.height))
-pix_map = new_img.load()
-
-threshold_ar = threshold(img_ar)
-for x in range(len(img_ar)):
-    for y in range(len(img_ar[0])):
-        pix_map[x, y] = threshold_ar[x][y]
-
-img.show()
-new_img.show()
+img = threshold(img)

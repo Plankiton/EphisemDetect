@@ -3,6 +3,7 @@
 *.pyc
 *venv*
 *.lock
+images
 patchs
 slices*
 .env

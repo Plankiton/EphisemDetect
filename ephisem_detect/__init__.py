@@ -5,7 +5,12 @@ from numpy import asarray
 from PIL import Image
 from sys import argv
 
-def compress_map(img_map:list):
+def compress_map(img_map:list) -> list:
+    '''
+    Compress the image pix map
+    returns a compressed pix map
+    '''
+
     c = 0
     new_map = []
     w, h = len(img_map), len(img_map[0])
@@ -32,6 +37,11 @@ def compress_map(img_map:list):
     return new_map
 
 def prepar_data(type_slice:str = 'middle'):
+    '''
+    Load and compress all slices on ./slices folder
+    returns a list with all slices loaded
+    '''
+
     from os import listdir
 
     slices = {}
@@ -47,14 +57,22 @@ def prepar_data(type_slice:str = 'middle'):
 
             for t in ['top', 'bottom', 'middle']:
                 t = f'{name}_{t}.tiff'
+                d = f'slices/{t}'
                 t = compress_map(threshold(Image.open(
-                    f'slices/{t}',
+                    d,
                 ))) if t in dir_list else None
 
-                slices[name] = t
+                slices[name] = {
+                    'data': t,
+                    'dir': d
+                }
     return slices
 
 def _threshold(img_ar: asarray):
+    '''
+    returns a array only with black or white pixels
+    '''
+
     ar_backup = img_ar
     balance_ar = []
     new_ar = []
@@ -84,6 +102,10 @@ def _threshold(img_ar: asarray):
     return new_ar
 
 def to_img(img_ar: asarray):
+    '''
+    Converts a image pix map to an Image
+    '''
+
     new_img = Image.new(mode='RGBA',
                         size = (len(img_ar[0]), len(img_ar)))
     pix_map = new_img.load()
@@ -96,10 +118,33 @@ def to_img(img_ar: asarray):
 
 
 def threshold(img: Image):
+    '''
+    returns a array only with black or white pixels from a image
+    '''
+
     if img.mode == 'I':
         img = img.convert('RGBA')
     img_ar = asarray(img)
     return _threshold(img_ar)
+
+
+def compair(data:dict, img_map:list):
+    '''
+    Do a comparation of all data and the image pix map
+    returns a list of percentages
+    '''
+
+    for img in data:
+        value = 0
+        name = img
+        img = data[img]['data']
+        if not img:continue
+        for x in range(len(img)):
+            for y in range(len(img[0])):
+                if img[x][y] == img_map[x][y]:
+                    value += 1
+        yield value*100/(len(img[0])*len(img)), name
+
 
 
 
@@ -125,16 +170,8 @@ Options:
     img = Image.open(argv[1])
     img_map = compress_map(threshold(img))
 
-    percentages = []
     print('\n\n:: Starting image compair')
-    for img in data:
-        value = 0
-        img = data[img]
-        if not img:continue
-        for x in range(len(img)):
-            for y in range(len(img[0])):
-                if img[x][y] == img_map[x][y]:
-                    value += 1
-        percentages.append(value*100/(len(img[0])*len(img)))
-
+    percentages = list(compair(data, img_map))
+    for p in range(len(percentages)):
+        percentages[p] = percentages[p][0]
     print(f'\n\nEphisem level = {sum(percentages)/len(percentages)}%')

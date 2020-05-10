@@ -21,8 +21,13 @@ section {
     font-family: Arial;
 }
 
+#header h1 {
+    font-size: 50pt;
+    color: #e74c3c;
+}
+
 div#image_form {
-    background: #ee3322;
+    background: #e74c3c;
     height: 70px;
     width: 350px;
     border-radius: 3px;
@@ -31,10 +36,6 @@ div#image_form {
     justify-content: center;
     align-items: center;
 }
-div#image_form:hover{
-    background: #dd2211;
-}
-
 div#input {
     display: flex;
     flex-direction: column;
@@ -43,15 +44,15 @@ div#input {
     width: 100%;
 }
 
-div#input input {
+div#input input, button {
     border-radius: 3px;
     padding: 5px;
     margin: 20px;
     border: none;
 }
 
-div#input #send_image {
-    background: #ee3322;
+div#input #send_image, button {
+    background: #e74c3c;
     width: 100%;
     height: 100%;
     color: #FFF;
@@ -61,8 +62,8 @@ div#input #send_image {
     margin-top: 20px;
 }
 
-div#input #send_image:hover {
-    background: #dd2211;
+div#input #send_image:hover, div#image_form:hover, button:hover {
+    background: #e74c3caa;
 }
 
 div#image_form #image{
@@ -113,3 +114,58 @@ label {
     text-align: center;
 }
 
+.file_inputed {
+    border-top: solid 1px #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ephisem_level {
+    color: #e74c3c;
+    font-size: 25pt;
+}
+
+.percent_content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.percent_content .item_compair {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.file_inputed img {
+    max-height: 100px;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.file_inputed div.image {
+    width: 350px;
+    height: 150px;
+    background: #e6e5e3;
+    border-radius: 3px;
+    margin: 10px;
+}
+
+.percent_content .item_compair h2 {
+    color: #222222;
+    font-size: 20pt;
+}
+
+.percent_content .item_compair p {
+    color: #e74c3c;
+    font-size: 18pt;
+}
+
+.hidden {
+    display: none !important;
+}

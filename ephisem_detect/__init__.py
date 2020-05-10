@@ -36,7 +36,7 @@ def compress_map(img_map:list) -> list:
         c += 1
     return new_map
 
-def prepar_data(slices_dir:str = None, type_slice:str = 'middle'):
+def prepar_data(slices_dir:str = None, slice_type:str = 'middle'):
     '''
     Load and compress all slices on ./slices folder
     returns a list with all slices loaded
@@ -47,7 +47,7 @@ def prepar_data(slices_dir:str = None, type_slice:str = 'middle'):
     slices = {}
     dir_list = listdir(slices_dir if slices_dir else 'slices')
     for i in dir_list:
-        if type_slice not in i:
+        if slice_type not in i:
             dir_list.remove(i)
 
     for slice in dir_list:
@@ -57,7 +57,7 @@ def prepar_data(slices_dir:str = None, type_slice:str = 'middle'):
 
             for t in ['top', 'bottom', 'middle']:
                 t = f'{name}_{t}.tiff'
-                d = f'slices/{t}'
+                d = f'{slices_dir}/{t}'
                 t = compress_map(threshold(Image.open(
                     d,
                 ))) if t in dir_list else None
@@ -161,10 +161,10 @@ Options:
         exit()
 
     print(':: Preparing data')
-    type_slice = 'middle'
+    slice_type = 'middle'
     if '-t' in argv:
-        type_slice = argv[argv.index('-t')+1].lower()
-    data = prepar_data(type_slice = type_slice)
+        slice_type = argv[argv.index('-t')+1].lower()
+    data = prepar_data(slice_type = slice_type)
 
     print(':: Preparing image inputed')
     img = Image.open(argv[1])

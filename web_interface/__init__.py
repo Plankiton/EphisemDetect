@@ -9,9 +9,9 @@ from web_interface.session import session
 
 data = {}
 server = Flask('Ephisem Detect')
-server.config['UPLOAD_FOLDER'] = 'images'
-for type_slice in ['middle', 'bottom', 'top']:
-    data[type_slice] = prepar_data(slices_dir = 'slices', type_slice = type_slice)
+server.config['UPLOAD_FOLDER'] = 'static/images'
+for slice_type in ['middle', 'bottom', 'top']:
+    data[slice_type] = prepar_data(slices_dir = 'static/slices', slice_type = slice_type)
 
 
 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Ephisem Detect</title>
+        <link rel="stylesheet" href="/static/style.css" type="text/css" media="all">
+    </head>
+    <body>
+        <div id="header" class="name">
+            <h1>Ephisem detecter</h1>
+        </div>
+
+        <section>
+            <div id="input">
+                <form action="/send" method="post" accept-charset="utf-8">
+                    <label for='image'>
+                        <div id="image_form" class="name">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                                                            width="48" height="48"
+                                                                                       viewBox="0 0 172 172"
+                                                                                       style=" fill:#FFFFFF;">
+                                <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#FFFFFF"><path d="M57.33333,14.33333v14.33333h-7.16667l-50.16667,16.34896v105.48438h172v-121.83333h-57.33333v-14.33333zM7.16667,21.5v14.33333l28.66667,-9.63021v-4.70312zM86,43c23.73958,0 43,19.26042 43,43c0,23.73958 -19.26042,43 -43,43c-23.73958,0 -43,-19.26042 -43,-43c0,-23.73958 19.26042,-43 43,-43zM86,57.33333c-15.84505,0 -28.66667,12.82162 -28.66667,28.66667c0,15.84506 12.82162,28.66667 28.66667,28.66667c15.84506,0 28.66667,-12.82161 28.66667,-28.66667c0,-15.84505 -12.82161,-28.66667 -28.66667,-28.66667z"></path></g></g>
+                            </svg>
+                            <input type="file" onchange="set_back()" name="image" id="image" accept="image/*" multiple>
+                        </div>
+                        <div id="selected_images"></div>
+                    </label>
+                    <input type="submit" name="send_image" id="send_image" value="Send images">
+                </form>
+            </div>
+        </section>
+
+        <div id="footer" class="name">
+            <h3>CopyRight &copy; Yaks Vinicios S. Souza &lt;vinicios.sousa909@gmail.com&gt</h3>
+        </div>
+
+        <script charset="utf-8">
+            function set_back() {
+                let imgs = document.getElementById('selected_images');
+                let input = document.getElementById('image');
+                let img_form = document.getElementById('image_form');
+                for (const file of input.files){
+                    div = document.createElement('div');
+                    div.setAttribute('class', 'info');
+                    text = document.createTextNode(file.name);
+                    p = document.createElement('h3');
+                    p.appendChild(text);
+                    div.appendChild(p);
+
+
+                    idiv = document.createElement('div');
+
+                    img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+
+                    idiv.appendChild(img);
+                    div.appendChild(idiv);
+                    imgs.appendChild(div);
+                }
+            }
+        </script>
+    </body>
+</html>

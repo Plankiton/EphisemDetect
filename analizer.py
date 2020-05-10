@@ -29,14 +29,13 @@ def compress_map(img_map:list):
         c += 1
     return new_map
 
-def prepar_data():
+def prepar_data(type_slice:str = 'middle'):
     from os import listdir
-    ignore = argv[argv.index('-i')+1:] if '-i' in argv else []
 
     slices = {}
     dir_list = listdir('slices')
-    for i in ignore:
-        while i in dir_list:
+    for i in dir_list:
+        if type_slice not in i:
             dir_list.remove(i)
 
     for slice in dir_list:
@@ -44,28 +43,13 @@ def prepar_data():
         print(f'  -> {name}')
         if '.tiff' in slice and name not in slices:
 
-            top = f'{name}_top.tiff'
-            top = None
-            '''asarray(threshold(Image.open(
-                f'slices/{top}',
-            ))).tolist() if top in dir_list else None'''
+            for t in ['top', 'bottom', 'middle']:
+                t = f'{name}_{t}.tiff'
+                t = compress_map(threshold(Image.open(
+                    f'slices/{t}',
+                ))) if t in dir_list else None
 
-            middle = f'{name}_middle.tiff'
-            middle = compress_map(threshold(Image.open(
-                f'slices/{middle}',
-            ))) if middle in dir_list else None
-
-            bottom = f'{name}_bottom.tiff'
-            bottom = None
-            '''asarray(threshold(Image.open(
-                f'slices/{bottom}',
-            ))).tolist() if bottom in dir_list else None'''
-
-            slices[name] = {
-                'top': top,
-                'middle': middle,
-                'bottom': bottom
-            }
+                slices[name] = t
     return slices
 
 def _threshold(img_ar: asarray):
@@ -119,7 +103,10 @@ def threshold(img: Image):
 
 if __name__ == '__main__':
     print(':: Preparing data')
-    data = prepar_data()
+    type_slice = 'middle'
+    if '-t' in argv:
+        type_slice = argv[argv.index('-t')+1].lower()
+    data = prepar_data(type_slice)
 
     print(':: Preparing image inputed')
     img = Image.open(argv[1])
@@ -129,7 +116,7 @@ if __name__ == '__main__':
     print('\n\n:: Starting image compair')
     for img in data:
         value = 0
-        img = data[img]['middle']
+        img = data[img]
         if not img:continue
         for x in range(len(img)):
             for y in range(len(img[0])):

@@ -1,7 +1,7 @@
 *chache*
 *.log
 *.pyc
-venv
-img*.png
+*venv*
 patchs
 slices*
+.env

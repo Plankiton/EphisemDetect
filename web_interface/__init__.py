@@ -41,7 +41,8 @@ def send():
         f.save(filedir)
         files.append({
             'dir': filedir,
-            'filename': f.filename
+            'filename': f.filename,
+            'name': f.filename[:f.filename.index('.')]
         })
 
     session['ephisem.files'] = files
@@ -69,13 +70,15 @@ def analize():
         img_map = compress_map(threshold(img))
 
         total = 0
-        type_slice = file['filename'][
+        slice_type = file['filename'][
             file['filename'].index('_')+1:file['filename'].index('.')
         ]
-        percentages = list(compair(data[type_slice], img_map))
+        percentages = list(compair(data[slice_type], img_map))
         for p in range(len(percentages)):
             total += percentages[p][0]
 
+        files[f]['slice_type'] = slice_type
         files[f]['ephisem_level'] = total/len(percentages)
-        files[f]['compair_percentes'] = percentages
+        files[f]['compair_percentages'] = percentages
+    session.pop('ephisem.files')
     return render('results.html', data = files)

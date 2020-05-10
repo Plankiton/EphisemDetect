@@ -7,12 +7,19 @@ from flask import (Flask,
                    render_template as render)
 from web_interface.session import session
 
+data = {}
 server = Flask('Ephisem Detect')
 server.config['UPLOAD_FOLDER'] = 'images'
+for type_slice in ['middle', 'bottom', 'top']:
+    data[type_slice] = prepar_data(slices_dir = 'slices', type_slice = type_slice)
+
+
 
 @server.route('/')
 def index():
     return render('index.html')
+
+
 
 @server.route('/send', methods = ['POST'])
 def send():
@@ -35,27 +42,34 @@ def send():
         })
 
     session['ephisem.files'] = files
-    return redirect('/analize')
+    return redirect('/loading')
+
+
+
+@server.route('/loading')
+def loading():
+    return render('loading.html')
+
+
 
 @server.route('/analize', methods = ['GET'])
 def analize():
-
-    type_slice = 'middle'
-    data = prepar_data(slices_dir = 'slices', type_slice = type_slice)
+    files = {}
     files = session['ephisem.files']
     for f in range(len(files)):
-
         file = files[f]
 
         img = Image.open(file['dir'])
         img_map = compress_map(threshold(img))
 
         total = 0
-        percentages = list(compair(data, img_map))
+        type_slice = file['filename'][
+            file['filename'].index('_')+1:file['filename'].index('.')
+        ]
+        percentages = list(compair(data[type_slice], img_map))
         for p in range(len(percentages)):
             total += percentages[p][0]
 
         files[f]['ephisem_level'] = total/len(percentages)
-        files[f]['compair_percentes'] = total/len(percentages)
-
+        files[f]['compair_percentes'] = percentages
     return render('results.html', data = files)

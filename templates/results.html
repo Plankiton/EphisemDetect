@@ -3,11 +3,24 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <title>Results</title>
+        <title>Ephisem Detect</title>
+        <link rel="stylesheet" href="/static/style.css" type="text/css" media="all">
     </head>
     <body>
+        <div id="header" class="name">
+            <h1>Ephisem detecter</h1>
+        </div>
+
+        <section>
+        </section>
+
+        <div id="footer" class="name">
+            <h3>CopyRight &copy; Yaks Vinicios S. Souza &lt;vinicios.sousa909@gmail.com&gt</h3>
+        </div>
+
         <script charset="utf-8">
-            console.log({{data|tojson}})
+            let data = {{data|tojson}};
+            console.log(data);
         </script>
     </body>
 </html>

@@ -164,7 +164,7 @@ Options:
     type_slice = 'middle'
     if '-t' in argv:
         type_slice = argv[argv.index('-t')+1].lower()
-    data = prepar_data(type_slice)
+    data = prepar_data(type_slice = type_slice)
 
     print(':: Preparing image inputed')
     img = Image.open(argv[1])

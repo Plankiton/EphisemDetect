@@ -55,7 +55,9 @@ def loading():
 @server.route('/analize', methods = ['GET'])
 def analize():
     files = {}
-    files = session['ephisem.files']
+    try:
+        files = session['ephisem.files']
+    except KeyError:return redirect('/')
     for f in range(len(files)):
         file = files[f]
 

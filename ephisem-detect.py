@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from functools import reduce
 from numpy import asarray
 from PIL import Image
@@ -102,6 +104,17 @@ def threshold(img: Image):
 
 
 if __name__ == '__main__':
+    if '--help' in argv or '-h' in argv or len(argv) == 1:
+        print('''
+Usage: ephisem-detect [options] <Image>
+
+Options:
+    -h, --help      Show this message.
+    -t, --type      Set type of image, must be
+                    "middle","top" or "bottom".
+        '''.strip())
+        exit()
+
     print(':: Preparing data')
     type_slice = 'middle'
     if '-t' in argv:

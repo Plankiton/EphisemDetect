@@ -5,13 +5,16 @@
         <meta name="viewport" content="width=device-width" />
         <title>Ephisem Detect</title>
         <link rel="stylesheet" href="/static/style.css" type="text/css" media="all">
+
+        <style type="text/css" media="screen">
+        </style>
     </head>
     <body>
         <div id="header" class="name">
-            <h1>Ephisem detecter</h1>
+            <h1>Ephisem detect</h1>
         </div>
 
-        <section>
+        <section id="content">
         </section>
 
         <div id="footer" class="name">
@@ -19,8 +22,92 @@
         </div>
 
         <script charset="utf-8">
+            function expand_info(id){
+                let elm = document.getElementById(id);
+                let slices = document.querySelectorAll(`#${id} div.percent_content`)
+                for (slice of slices){
+                    if (slice.style.display === 'none')
+                        slice.style.display = 'flex';
+                    else
+                        slice.style.display = 'none';
+                }
+            }
+
+            let root = document.getElementById('content');
             let data = {{data|tojson}};
             console.log(data);
+
+            first = true;
+            for (file of data){
+                let file_div = document.createElement('div');
+                file_div.setAttribute('id', file.name);
+                file_div.setAttribute('class', 'file_inputed');
+                let file_title = document.createElement('h2');
+                file_title.appendChild(document.createTextNode(
+                    file.filename
+                ));
+                file_div.appendChild(file_title);
+                let file_percentage = document.createElement('p');
+                file_percentage.appendChild(document.createTextNode(
+                `${file.ephisem_level}% of chances of to be ephisem`
+                ))
+                file_percentage.setAttribute('class', 'ephisem_level');
+
+                let button = document.createElement('button');
+                button.setAttribute('onclick', `expand_info("${file.name}")`)
+                button.appendChild(document.createTextNode(
+                    'Expand info'
+                ));
+
+                let file_compair = document.createElement('div');
+                file_compair.setAttribute('class', 'percent_content');
+
+                let file_div_img = document.createElement('div');
+                file_div_img.setAttribute('class', 'image');
+                let image = document.createElement('img');
+                image.src = file.dir;
+                file_div_img.appendChild(image)
+
+                file_div.appendChild(file_div_img);
+                file_div.appendChild(button);
+                file_div.appendChild(file_compair);
+                file_div.appendChild(file_percentage);
+                root.appendChild(file_div);
+
+
+                for (slice of file.compair_percentages){
+                    let item = document.createElement('div');
+                    item.setAttribute('class', 'item_compair');
+
+                    let img_div = document.createElement('div');
+                    img_div.setAttribute('class', 'image');
+                    let img = document.createElement('img');
+                    img.src = `/static/slices/${slice[1]}_${file.slice_type}.tiff`
+
+                    let percentage = document.createElement('p');
+                    percentage.appendChild(document.createTextNode(
+                    `${slice[0]}%`
+                    ))
+                    let item_title = document.createElement('h2');
+                    item_title.appendChild(document.createTextNode(
+                        slice[1]
+                    ));
+
+                    img_div.appendChild(img);
+                    item.appendChild(item_title);
+                    item.appendChild(img_div);
+                    item.appendChild(percentage);
+
+                    file_compair.appendChild(item);
+                }
+
+                expand_info(file.name);
+
+                if (first) {
+                    file_div.style.border = 'none'
+                }
+                first = false
+            }
         </script>
     </body>
 </html>

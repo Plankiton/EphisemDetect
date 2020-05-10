@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Ephisem Detect</title>
+        <link rel="stylesheet" href="/static/style.css" type="text/css" media="all">
+
+
+        <link rel="stylesheet" href="/static/loading/css/normalize.css">
+        <link rel="stylesheet" href="/static/loading/css/main.css">
+        <script src="/static/loading/js/vendor/modernizr-2.6.2.min.js"></script>
+        <style type="text/css">
+        .back-link a {
+            color: #4ca340;
+            text-decoration: none; 
+            border-bottom: 1px #4ca340 solid;
+        }
+        .back-link a:hover,
+        .back-link a:focus {
+            color: #408536; 
+            text-decoration: none;
+            border-bottom: 1px #408536 solid;
+        }
+        h1 {
+            height: 100%;
+            /* The html and body elements cannot have any padding or margin. */
+            margin: 0;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 32px;
+            margin-bottom: 3px;
+        }
+        .entry-header {
+            text-align: left;
+            margin: 0 auto 50px auto;
+            width: 80%;
+            max-width: 978px;
+            position: relative;
+            z-index: 10001;
+        }
+        #loader, #loader-wrapper, .loader-section {
+            background: white !important;
+        }
+
+        #load_form {
+            display: none;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="header" class="name">
+            <h1>Ephisem detecter</h1>
+        </div>
+
+        <section>
+            <div id="loader-wrapper">
+                <div id="loader"></div>
+
+                <div class="loader-section section-left"></div>
+                <div class="loader-section section-right"></div>
+
+            </div>
+            <form id='do_load' action="/analize" method="get" accept-charset="utf-8">
+            </form>
+        </section>
+
+        <div id="footer" class="name">
+            <h3>CopyRight &copy; Yaks Vinicios S. Souza &lt;vinicios.sousa909@gmail.com&gt</h3>
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/static/loading/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="/static/loading/js/main.js"></script>
+
+        <script charset="utf-8">
+            document.forms['do_load'].submit();
+        </script>
+    </body>
+</html>

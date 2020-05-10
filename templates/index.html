@@ -41,21 +41,23 @@
                 let input = document.getElementById('image');
                 let img_form = document.getElementById('image_form');
                 for (const file of input.files){
-                    div = document.createElement('div');
-                    div.setAttribute('class', 'info');
-                    text = document.createTextNode(file.name);
-                    p = document.createElement('h3');
-                    p.appendChild(text);
-                    div.appendChild(p);
+                    let div = document.createElement('div');
 
+                    let text = document.createTextNode(file.name);
+                    let text_elmt = document.createElement('h3');
+                    text_elmt.appendChild(text);
 
-                    idiv = document.createElement('div');
+                    let idiv = document.createElement('div');
 
-                    img = document.createElement('img');
+                    let img = document.createElement('img');
                     img.src = URL.createObjectURL(file);
 
                     idiv.appendChild(img);
+
+                    div.setAttribute('class', 'info');
+                    div.appendChild(text_elmt);
                     div.appendChild(idiv);
+
                     imgs.appendChild(div);
                 }
             }

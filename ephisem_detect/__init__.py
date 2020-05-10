@@ -36,7 +36,7 @@ def compress_map(img_map:list) -> list:
         c += 1
     return new_map
 
-def prepar_data(type_slice:str = 'middle'):
+def prepar_data(slices_dir:str = None, type_slice:str = 'middle'):
     '''
     Load and compress all slices on ./slices folder
     returns a list with all slices loaded
@@ -45,7 +45,7 @@ def prepar_data(type_slice:str = 'middle'):
     from os import listdir
 
     slices = {}
-    dir_list = listdir('slices')
+    dir_list = listdir(slices_dir if slices_dir else 'slices')
     for i in dir_list:
         if type_slice not in i:
             dir_list.remove(i)

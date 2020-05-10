@@ -21,8 +21,11 @@ def index():
 
 
 
-@server.route('/send', methods = ['POST'])
+@server.route('/send', methods = ['POST', 'GET'])
 def send():
+    if request.method == 'GET':
+        return redirect('/')
+
     from datetime import datetime as d
 
     files = []
@@ -42,13 +45,14 @@ def send():
         })
 
     session['ephisem.files'] = files
-    return redirect('/loading')
+    return redirect('/loading?page=analize')
 
 
 
 @server.route('/loading')
 def loading():
-    return render('loading.html')
+    page = request.args.get('page', default='analize')
+    return render('loading.html', page=page)
 
 
 

@@ -8,7 +8,7 @@
     </head>
     <body>
         <div id="header" class="name">
-            <h1>Ephisem detecter</h1>
+            <h1>Ephisem detect</h1>
         </div>
 
         <section>
@@ -38,6 +38,8 @@
         <script charset="utf-8">
             function set_back() {
                 let imgs = document.getElementById('selected_images');
+                imgs.innerHTML = '';
+
                 let input = document.getElementById('image');
                 let img_form = document.getElementById('image_form');
                 for (const file of input.files){

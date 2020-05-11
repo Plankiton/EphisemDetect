@@ -6,12 +6,13 @@ from flask import (Flask,
                    request,
                    render_template as render)
 from web_interface.session import session
+from json import load
 
 data = {}
+with open('static/data.json') as json:
+    data = load(json)
 server = Flask('Ephisem Detect')
 server.config['UPLOAD_FOLDER'] = 'static/images'
-for slice_type in ['middle', 'bottom', 'top']:
-    data[slice_type] = prepar_data(slices_dir = 'static/slices', slice_type = slice_type)
 
 
 

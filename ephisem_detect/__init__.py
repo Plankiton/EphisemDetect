@@ -144,34 +144,3 @@ def compair(data:dict, img_map:list):
                 if img[x][y] == img_map[x][y]:
                     value += 1
         yield value*100/(len(img[0])*len(img)), name
-
-
-
-
-if __name__ == '__main__':
-    if '--help' in argv or '-h' in argv or len(argv) == 1:
-        print('''
-Usage: ephisem-detect [options] <Image>
-
-Options:
-    -h, --help      Show this message.
-    -t, --type      Set type of image, must be
-                    "middle","top" or "bottom".
-        '''.strip())
-        exit()
-
-    print(':: Preparing data')
-    slice_type = 'middle'
-    if '-t' in argv:
-        slice_type = argv[argv.index('-t')+1].lower()
-    data = prepar_data(slice_type = slice_type)
-
-    print(':: Preparing image inputed')
-    img = Image.open(argv[1])
-    img_map = compress_map(threshold(img))
-
-    print('\n\n:: Starting image compair')
-    percentages = list(compair(data, img_map))
-    for p in range(len(percentages)):
-        percentages[p] = percentages[p][0]
-    print(f'\n\nEphisem level = {sum(percentages)/len(percentages)}%')

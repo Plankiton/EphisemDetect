@@ -6,11 +6,12 @@ from flask import (Flask,
                    request,
                    render_template as render)
 from web_interface.session import session
-from json import load
+from json import loads
+rm = lambda d: system(f'rm "{d}"')
 
 data = {}
 with open('static/data.json') as json:
-    data = load(json)
+    data = loads(json.read())
 server = Flask('Ephisem Detect')
 server.config['UPLOAD_FOLDER'] = 'static/images'
 
@@ -19,7 +20,6 @@ server.config['UPLOAD_FOLDER'] = 'static/images'
 @server.route('/')
 def index():
     from os import listdir, system
-    rm = lambda d: system(f'rm "{d}"')
     for f in listdir('static/images'):
         rm(f'static/images/{f}')
     return render('index.html')

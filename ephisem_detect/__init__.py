@@ -52,20 +52,19 @@ def prepar_data(slices_dir:str = None, slice_type:str = 'middle'):
 
     for slice in dir_list:
         name = slice[:slice.index('_')]
-        print(f'  -> {name}')
         if '.tiff' in slice and name not in slices:
 
-            for t in ['top', 'bottom', 'middle']:
-                t = f'{name}_{t}.tiff'
-                d = f'{slices_dir}/{t}'
-                t = compress_map(threshold(Image.open(
-                    d,
-                ))) if t in dir_list else None
+            print(f'  -> {name}')
+            t = f'{name}_{slice_type}.tiff'
+            d = f'{slices_dir}/{t}'
+            t = compress_map(threshold(Image.open(
+                d,
+            ))) if t in dir_list else None
 
-                slices[name] = {
-                    'data': t,
-                    'dir': d
-                }
+            slices[name] = {
+                'data': t,
+                'dir': d
+            }
     return slices
 
 def _threshold(img_ar: asarray):

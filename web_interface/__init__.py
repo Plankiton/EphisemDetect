@@ -7,6 +7,7 @@ from flask import (Flask,
                    render_template as render)
 from web_interface.session import session
 from json import loads
+from os import system
 rm = lambda d: system(f'rm "{d}"')
 
 data = {}

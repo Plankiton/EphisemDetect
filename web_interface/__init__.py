@@ -20,8 +20,10 @@ server.config['UPLOAD_FOLDER'] = 'static/images'
 @server.route('/')
 def index():
     from os import listdir, system
-    for f in listdir('static/images'):
-        rm(f'static/images/{f}')
+    try:
+        for f in listdir('static/images'):
+            rm(f'static/images/{f}')
+    except FileNotFoundError:system('mkdir -p static/images')
     return render('index.html')
 
 

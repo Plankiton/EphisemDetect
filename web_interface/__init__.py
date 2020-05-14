@@ -4,6 +4,7 @@ from hashlib import sha1 as hash
 from flask import (Flask,
                    redirect,
                    request,
+                   jsonify,
                    render_template as render)
 from web_interface.session import session
 from os import system, listdir
@@ -56,38 +57,34 @@ def send():
         })
 
     session['ephisem.files'] = files
-    return redirect('/loading?page=analize')
+    return redirect('/analize')
 
 
 
-@server.route('/loading')
-def loading():
-    page = request.args.get('page', default='analize')
-    return render('loading.html', page=page)
-
-
-
-@server.route('/analize', methods = ['GET'])
+@server.route('/analize', methods = ['GET', 'POST'])
 def analize():
-    files = {}
-    try:
-        files = session['ephisem.files']
-    except KeyError:return redirect('/')
-    for f in range(len(files)):
-        file = files[f]
+    if request.method == 'POST':
+        files = []
+        try:
+            files = session['ephisem.files']
+        except KeyError:return redirect('/')
+        for f in range(len(files)):
+            file = files[f]
 
-        img = Image.open(file['dir'])
-        img_map = compress_map(threshold(img))
+            img = Image.open(file['dir'])
+            img_map = compress_map(threshold(img))
 
-        total = 0
-        slice_type = file['filename'][
-            file['filename'].index('_')+1:file['filename'].index('.')
-        ]
-        percentages = list(compair(data[slice_type], img_map))
-        for p in range(len(percentages)):
-            total += percentages[p][0]
+            total = 0
+            slice_type = file['filename'][
+                file['filename'].index('_')+1:file['filename'].index('.')
+            ]
+            percentages = list(compair(data[slice_type], img_map))
+            for p in range(len(percentages)):
+                total += percentages[p][0]
 
-        files[f]['slice_type'] = slice_type
-        files[f]['ephisem_level'] = total/len(percentages)
-        files[f]['compair_percentages'] = percentages
-    return render('results.html', data = files)
+            files[f]['slice_type'] = slice_type
+            files[f]['ephisem_level'] = total/len(percentages)
+            files[f]['compair_percentages'] = percentages
+
+            return jsonify(files)
+    return render('results.html')

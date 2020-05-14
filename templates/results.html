@@ -6,7 +6,53 @@
         <title>Ephisem Detect</title>
         <link rel="stylesheet" href="/static/style.css" type="text/css" media="all">
 
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Ephisem Detect</title>
+        <link rel="stylesheet" href="/static/style.css" type="text/css" media="all">
+
+
+        <link rel="stylesheet" href="/static/loading/css/normalize.css">
+        <link rel="stylesheet" href="/static/loading/css/main.css">
+        <script src="/static/loading/js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" charset="utf-8"></script>
+        <style type="text/css">
+        .back-link a {
+            color: #4ca340;
+            text-decoration: none; 
+            border-bottom: 1px #4ca340 solid;
+        }
+        .back-link a:hover,
+        .back-link a:focus {
+            color: #408536; 
+            text-decoration: none;
+            border-bottom: 1px #408536 solid;
+        }
+        h1 {
+            height: 100%;
+            /* The html and body elements cannot have any padding or margin. */
+            margin: 0;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 32px;
+            margin-bottom: 3px;
+        }
+        .entry-header {
+            text-align: left;
+            margin: 0 auto 50px auto;
+            width: 80%;
+            max-width: 978px;
+            position: relative;
+            z-index: 10001;
+        }
+        #loader, #loader-wrapper, .loader-section {
+            background: white !important;
+        }
+
+        #load_form {
+            display: none;
+        }
+        </style>
     </head>
     <body>
         <div id="header" class="name">
@@ -14,6 +60,18 @@
         </div>
 
         <section id="content">
+            <div id="loader-wrapper">
+                <div id="loader"></div>
+
+                <div class="loader-section section-left"></div>
+                <div class="loader-section section-right"></div>
+
+            </div>
+        </section>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="/static/loading/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="/static/loading/js/main.js"></script>
         </section>
 
         <form action="/" method="get" accept-charset="utf-8">
@@ -40,86 +98,94 @@
             }
 
             let root = document.getElementById('content');
-            let data = {{data|tojson}};
-            console.log(data);
-
-            first = true;
-            for (file of data){
-                let file_div = document.createElement('div');
-                file_div.setAttribute('id', file.name);
-                file_div.setAttribute('class', 'file_inputed');
-                let file_title = document.createElement('h2');
-                file_title.appendChild(document.createTextNode(
-                    file.filename
-                ));
-                file_div.appendChild(file_title);
-                let file_percentage = document.createElement('p');
-                file_percentage.appendChild(document.createTextNode(
-                `${file.ephisem_level}% of chances of to be ephisem`
-                ))
-                file_percentage.setAttribute('class', 'ephisem_level');
-
-                let button = document.createElement('button');
-                button.setAttribute('onclick', `expand_info("${file.name}")`)
-                button.appendChild(document.createTextNode(
-                    'Expand info'
-                ));
-
-                let file_compair = document.createElement('div');
-                file_compair.setAttribute('class', 'percent_content');
-
-                let file_div_img = document.createElement('div');
-                file_div_img.setAttribute('class', 'image');
-                let image = document.createElement('img');
-                image.src = file.dir;
-                file_div_img.appendChild(image)
-
-                file_div.appendChild(file_div_img);
-                file_div.appendChild(button);
-                file_div.appendChild(file_compair);
-                file_div.appendChild(file_percentage);
-                root.appendChild(file_div);
+            let data = null;
+            axios.post('/analize', {'get':'files'}).then((response) => {
+                data = response.data
 
 
-                for (slice of file.compair_percentages){
-                    let item = document.createElement('div');
-                    item.setAttribute('class', 'item_compair');
-
-                    let img_div = document.createElement('div');
-                    img_div.setAttribute('class', 'image');
-                    let img = document.createElement('img');
-                    img.src = `/static/slices/${slice[1]}_${file.slice_type}.tiff`
-
-                    let percentage = document.createElement('p');
-                    percentage.appendChild(document.createTextNode(
-                    `${slice[0]}%`
+                first = true;
+                for (file of data){
+                    root.innerHTML = '';
+                    let file_div = document.createElement('div');
+                    file_div.setAttribute('id', file.name);
+                    file_div.setAttribute('class', 'file_inputed');
+                    let file_title = document.createElement('h2');
+                    file_title.appendChild(document.createTextNode(
+                        file.filename
+                    ));
+                    file_div.appendChild(file_title);
+                    let file_percentage = document.createElement('p');
+                    file_percentage.appendChild(document.createTextNode(
+                    `${file.ephisem_level}% of chances of to be ephisem`
                     ))
-                    let item_title = document.createElement('h2');
-                    item_title.appendChild(document.createTextNode(
-                        slice[1]
+                    file_percentage.setAttribute('class', 'ephisem_level');
+
+                    let button = document.createElement('button');
+                    button.setAttribute('onclick', `expand_info("${file.name}")`)
+                    button.appendChild(document.createTextNode(
+                        'Expand info'
                     ));
 
-                    img_div.appendChild(img);
-                    item.appendChild(item_title);
-                    item.appendChild(img_div);
-                    item.appendChild(percentage);
+                    let file_compair = document.createElement('div');
+                    file_compair.setAttribute('class', 'percent_content');
 
-                    file_compair.appendChild(item);
+                    let file_div_img = document.createElement('div');
+                    file_div_img.setAttribute('class', 'image');
+                    let image = document.createElement('img');
+                    image.src = file.dir;
+                    file_div_img.appendChild(image)
+
+                    file_div.appendChild(file_div_img);
+                    file_div.appendChild(button);
+                    file_div.appendChild(file_compair);
+                    file_div.appendChild(file_percentage);
+                    root.appendChild(file_div);
+
+
+                    for (slice of file.compair_percentages){
+                        let item = document.createElement('div');
+                        item.setAttribute('class', 'item_compair');
+
+                        let img_div = document.createElement('div');
+                        img_div.setAttribute('class', 'image');
+                        let img = document.createElement('img');
+                        img.src = `/static/slices/${slice[1]}_${file.slice_type}.tiff`
+
+                        let percentage = document.createElement('p');
+                        percentage.appendChild(document.createTextNode(
+                        `${slice[0]}%`
+                        ))
+                        let item_title = document.createElement('h2');
+                        item_title.appendChild(document.createTextNode(
+                            slice[1]
+                        ));
+
+                        img_div.appendChild(img);
+                        item.appendChild(item_title);
+                        item.appendChild(img_div);
+                        item.appendChild(percentage);
+
+                        file_compair.appendChild(item);
+                    }
+
+                    expand_info(file.name);
+
+                    if (first) {
+                        file_div.style.border = 'none'
+                    }
+                    first = false
+
                 }
 
-                expand_info(file.name);
+                axios.post('/remove_file', data).then((resp) => {
+                    console.log(resp);
+                }).then((error) => {
+                    console.log(error);
+                });
 
-                if (first) {
-                    file_div.style.border = 'none'
-                }
-                first = false
 
-            }
-
-            axios.post('/remove_file', data).then((resp) => {
-                console.log(resp);
             }).then((error) => {
-                console.log(error);
+                    console.log(error)
             });
         </script>
     </body>

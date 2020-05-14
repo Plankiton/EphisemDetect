@@ -6,8 +6,7 @@
         <title>Ephisem Detect</title>
         <link rel="stylesheet" href="/static/style.css" type="text/css" media="all">
 
-        <style type="text/css" media="screen">
-        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" charset="utf-8"></script>
     </head>
     <body>
         <div id="header" class="name">
@@ -21,6 +20,9 @@
             <input type="submit" name="" id="" value="Send more images">
         </form>
 
+        <form id='remove_file' action="/remove_file" class='hidden' method="get" accept-charset="utf-8">
+            <input type="text" name="filedir" id="filedir" value="">
+        </form>
 
         <div id="footer" class="name">
             <h3>CopyRight &copy; Yaks Vinicios S. Souza &lt;vinicios.sousa909@gmail.com&gt</h3>
@@ -111,7 +113,14 @@
                     file_div.style.border = 'none'
                 }
                 first = false
+
             }
+
+            axios.post('/remove_file', data).then((resp) => {
+                console.log(resp);
+            }).then((error) => {
+                console.log(error);
+            });
         </script>
     </body>
 </html>

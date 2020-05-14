@@ -8,7 +8,7 @@ from flask import (Flask,
 from web_interface.session import session
 from json import loads
 from os import system
-rm = lambda d: system(f'rm "{d}"')
+rm = lambda d: system(f'rm -rfv "{d}"')
 
 data = {}
 with open('static/data.json') as json:
@@ -20,14 +20,13 @@ server.config['UPLOAD_FOLDER'] = 'static/images'
 
 @server.route('/')
 def index():
-    from os import listdir, system
-    try:
-        for f in listdir('static/images'):
-            rm(f'static/images/{f}')
-    except FileNotFoundError:system('mkdir -p static/images')
     return render('index.html')
 
-
+@server.route('/remove_file', methods=['POST'])
+def remove_file():
+    for f in request.json:
+        rm(f['dir'])
+    return str()
 
 @server.route('/send', methods = ['POST', 'GET'])
 def send():
@@ -88,5 +87,4 @@ def analize():
         files[f]['slice_type'] = slice_type
         files[f]['ephisem_level'] = total/len(percentages)
         files[f]['compair_percentages'] = percentages
-    session.pop('ephisem.files')
     return render('results.html', data = files)

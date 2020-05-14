@@ -86,5 +86,5 @@ def analize():
             files[f]['ephisem_level'] = total/len(percentages)
             files[f]['compair_percentages'] = percentages
 
-            return jsonify(files)
+        return jsonify(files)
     return render('results.html')

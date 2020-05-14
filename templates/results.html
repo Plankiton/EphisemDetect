@@ -99,7 +99,7 @@
 
             let root = document.getElementById('content');
             let data = null;
-            axios.post('/analize').then((response) => {
+            axios.post('/analize', {}, {timeout: Infinity}).then((response) => {
                 data = response.data
 
 

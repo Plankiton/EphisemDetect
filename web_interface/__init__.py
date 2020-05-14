@@ -6,8 +6,8 @@ from flask import (Flask,
                    request,
                    render_template as render)
 from web_interface.session import session
+from os import system, listdir
 from json import loads
-from os import system
 rm = lambda d: system(f'rm -rfv "{d}"')
 
 data = {}
@@ -15,6 +15,9 @@ with open('static/data.json') as json:
     data = loads(json.read())
 server = Flask('Ephisem Detect')
 server.config['UPLOAD_FOLDER'] = 'static/images'
+try:
+    listdir(server.config['UPLOAD_FOLDER'])
+except FileNotFoundError:system(f"mkdir {server.config['UPLOAD_FOLDER']}")
 
 
 
